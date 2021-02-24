@@ -1,10 +1,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Box } from './Box.js';
-import io from 'socket.io-client';
 import './Board.css';
 
-const socket = io(); // Connects to socket connection
 
 export function Board(props) {
   const [board, setBoard] = useState(['','','','','','','','','']);
@@ -22,7 +20,7 @@ export function Board(props) {
     setBoard((prevBoard) => [...prevBoard.slice(0, index), symbol, ...prevBoard.slice(index + 1)]);
     setMoves((prevMoves) => prevMoves + 1);
       
-    socket.emit('move', { 
+    props.socket.emit('move', { 
       move: {
         index,
         symbol
@@ -33,7 +31,7 @@ export function Board(props) {
   
   
   useEffect(() => {
-    socket.on('move', (data) => {
+    props.socket.on('move', (data) => {
       console.log('Move event received!');
       console.log(data);
       setBoard((prevBoard) => [...prevBoard.slice(0, data.move.index), data.move.symbol, ...prevBoard.slice(data.move.index + 1)]);

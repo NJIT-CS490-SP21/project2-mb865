@@ -3,6 +3,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import { Board } from './Board.js';
+import { Users } from './Users.js';
 import { Login } from './Login.js';
 import { Header } from './Header.js';
 
@@ -17,16 +18,16 @@ function App() {
     if (inputValue != null) {
       console.log('setting username');
       setUsername(inputValue);
-      setPlayers(prevPlayers => [...prevPlayers, inputValue]);
+      setPlayers(prevPlayers => [...prevPlayers, [inputValue, socket.id]]);
     }
   }
   
-  function findUserType() {
-    console.log(players)
-    if (players.length == 1) {
+  function findUserType(position) {
+    console.log('players in finduser', players)
+    if (position == 0) {
       console.log('I am player X');
       setUserType('X');
-    } else if (players.length == 2) {
+    } else if (position == 1) {
       console.log('I am player O');
       setUserType('O');
     } else {
@@ -37,17 +38,23 @@ function App() {
   
   useEffect(() => { 
     if (username) {
-      console.log(username + ' is set');
-      console.log('Tell everyone im logged in');
-      findUserType()
-      socket.emit('login', username);
+      findUserType(players.length - 1);
+      socket.emit('updatePlayers', username);
     }
   }, [username])
   
+  
   useEffect(() => {
-    socket.on('login', (players) => {
-      console.log('Time to update my players');
-      setPlayers(players)
+    socket.on('updatePlayers', (updatedPlayers) => {
+      console.log('updated players', updatedPlayers);
+      setPlayers(updatedPlayers);
+    });
+    socket.on('removePlayer', (updatedPlayers) => {
+      console.log('removing player');
+      setPlayers(updatedPlayers);
+      const findPlayer = (player) => player[1] == socket.id;
+      const position = updatedPlayers.findIndex(findPlayer)
+      findUserType(position)
     });
   }, []);
 
@@ -55,7 +62,8 @@ function App() {
     return (
       <div>
         <Header />
-        <Board userType = {userType}/>
+        <Board socket = {socket} userType = {userType}/>
+        <Users players = {players}/>
       </div>
     );
   else
