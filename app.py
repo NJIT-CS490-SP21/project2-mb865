@@ -26,8 +26,6 @@ def index(filename):
 @socketio.on('connect')
 def on_connect():
     global players
-    print('connection players', players)
-    print(request.sid)
     socketio.emit('updatePlayers', players, broadcast=True)
 
 
@@ -37,24 +35,23 @@ def on_disconnect():
     for player in players:
         if player[1] == request.sid:
             players.remove(player)
-            print(players)
-            
     socketio.emit('removePlayer', players, broadcast=True)
-    print('disconnected players', players)
-    print(request.sid)
+
 
 @socketio.on('updatePlayers')
 def on_update_players(username):
     global players
     players.append([username, request.sid])
     socketio.emit('updatePlayers',  players, broadcast=True, include_self=False)
-    print('updated players', players)
 
 
 @socketio.on('move')
 def on_move(data):
-    print(str(data))
     socketio.emit('move',  data, broadcast=True, include_self=False)
+    
+@socketio.on('victory')
+def on_victory():
+    socketio.emit('victory', broadcast=True)
 
 
 socketio.run(

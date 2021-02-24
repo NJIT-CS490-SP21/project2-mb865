@@ -16,22 +16,17 @@ function App() {
   
   function onLogin(inputValue) {
     if (inputValue != null) {
-      console.log('setting username');
       setUsername(inputValue);
       setPlayers(prevPlayers => [...prevPlayers, [inputValue, socket.id]]);
     }
   }
   
   function findUserType(position) {
-    console.log('players in finduser', players)
     if (position == 0) {
-      console.log('I am player X');
       setUserType('X');
     } else if (position == 1) {
-      console.log('I am player O');
       setUserType('O');
     } else {
-      console.log('I am a spectator');
       setUserType('spectator');
     }
   }
@@ -46,11 +41,9 @@ function App() {
   
   useEffect(() => {
     socket.on('updatePlayers', (updatedPlayers) => {
-      console.log('updated players', updatedPlayers);
       setPlayers(updatedPlayers);
     });
     socket.on('removePlayer', (updatedPlayers) => {
-      console.log('removing player');
       setPlayers(updatedPlayers);
       const findPlayer = (player) => player[1] == socket.id;
       const position = updatedPlayers.findIndex(findPlayer)
@@ -62,7 +55,7 @@ function App() {
     return (
       <div>
         <Header />
-        <Board socket = {socket} userType = {userType}/>
+        <Board socket = {socket} userType = {userType} username={username}/>
         <Users players = {players}/>
       </div>
     );
