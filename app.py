@@ -52,8 +52,15 @@ def on_move(data):
 @socketio.on('victory')
 def on_victory(victor):
     socketio.emit('victory', victor, broadcast=True)
+    
+@socketio.on('draw')
+def on_draw():
+    socketio.emit('draw', broadcast=True)
 
-
+@socketio.on('playAgain')
+def on_play_again(userType):
+    socketio.emit('playAgain', userType, broadcast=True)
+    
 socketio.run(
     app,
     host=os.getenv('IP', '0.0.0.0'),

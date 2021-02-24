@@ -1,7 +1,6 @@
 import './Users.css';
 
 export function Users(props) {
-    console.log(props.players.length);
     if (props.players.length == 1) {
         return (
             <div className="user-container">
