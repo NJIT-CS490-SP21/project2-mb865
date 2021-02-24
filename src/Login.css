@@ -25,6 +25,7 @@ input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
 
 button {
     margin-top: 0.3rem;
+    margin-bottom: 1.3rem;
     width: 200px;
     height: 30px;
     font-family: 'Press Start 2P', cursive;
@@ -32,7 +33,6 @@ button {
     border-color: #4f4f4f;
     border-style: solid;
     background-color: #808080;
-    caret-color: #4f4f4f;
     text-indent: 7px;
     color: #1f1f1f;
 }

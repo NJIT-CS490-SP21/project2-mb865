@@ -50,8 +50,8 @@ def on_move(data):
     socketio.emit('move',  data, broadcast=True, include_self=False)
     
 @socketio.on('victory')
-def on_victory():
-    socketio.emit('victory', broadcast=True)
+def on_victory(victor):
+    socketio.emit('victory', victor, broadcast=True)
 
 
 socketio.run(

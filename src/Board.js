@@ -4,11 +4,12 @@ import { Box } from './Box.js';
 import './Board.css';
 
 let lastIndex = 0;
-let victory = false;
 
 export function Board(props) {
   const [board, setBoard] = useState(['','','','','','','','','']);
   const [moves, setMoves] = useState(0);
+  const [victory, setVictory] = useState(false);
+  const [victor, setVictor] = useState(null);
   
   function onClickBox(index) {
     if (board[index] != '' || victory) return;
@@ -74,7 +75,7 @@ export function Board(props) {
   
   useEffect(() => {
     if (checkIfWon(lastIndex)) {
-      props.socket.emit('victory')
+      props.socket.emit('victory', props.username)
     }
   }, [board]);
   
@@ -86,22 +87,35 @@ export function Board(props) {
       setBoard((prevBoard) => [...prevBoard.slice(0, data.move.index), data.move.symbol, ...prevBoard.slice(data.move.index + 1)]);
       setMoves((prevMoves) => prevMoves + 1);
     });
-    props.socket.on('victory', () => {
+    props.socket.on('victory', (victor) => {
       console.log("VICTORY!!!!");
-      victory = true;
+      setVictor(victor);
+      setVictory(true);
     });
   }, []);
 
-  
-  return (
-    <div className="board-container">
-      <h2>{props.username} ({props.userType})</h2>
-      <h3></h3>
-      <div className="board">
-        {board.map((piece, index) => {
-            return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
-        })}
+  if (!victory) 
+    return (
+      <div className="board-container">
+        <h2>{props.username} ({props.userType})</h2>
+        <div className="board">
+          {board.map((piece, index) => {
+              return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
+          })}
+        </div>
       </div>
-    </div>
-  );
+    );
+  else
+    return (
+      <div className="board-container">
+        <h2>{props.username} ({props.userType})</h2>
+        <h3>{victory ? victor + ' has won!' : ''}</h3>
+        <button>Play Again?</button>
+        <div className="board">
+          {board.map((piece, index) => {
+              return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
+          })}
+        </div>
+      </div>
+    );
 }
