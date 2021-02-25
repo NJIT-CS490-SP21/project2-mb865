@@ -1,3 +1,18 @@
 .box {
-  border: 1px solid black; /* Shows the lines in the CSS grid */
+  border: 1px solid #4f4f4f; /* Shows the lines in the CSS grid */
+  background: #808080;
+  padding-top: 2.4rem;
+  padding-left: 0.6rem;
+}
+
+.piece {
+    font-size: 6rem;
+}
+
+.x {
+    color: #FC354C;
+}
+
+.o {
+    color: #0ABFBC;
 }
