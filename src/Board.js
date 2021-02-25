@@ -88,8 +88,9 @@ export function Board(props) {
   }
   
   useEffect(() => {
-    if (gameStatus(lastIndex) == 'victory') 
+    if (gameStatus(lastIndex) == 'victory') {
       props.socket.emit('victory', props.username);
+    }
     else if (gameStatus(lastIndex) == 'draw')
       props.socket.emit('draw');
   }, [board]);
@@ -101,6 +102,11 @@ export function Board(props) {
   
   
   useEffect(() => {
+    props.socket.on('initBoard', (boardData) => {
+      console.log('initializing my board');
+      setBoard(boardData.board);
+      setMoves(boardData.moves)
+    });
     props.socket.on('move', (data) => {
       setBoard((prevBoard) => [...prevBoard.slice(0, data.move.index), data.move.symbol, ...prevBoard.slice(data.move.index + 1)]);
       setMoves((prevMoves) => prevMoves + 1);

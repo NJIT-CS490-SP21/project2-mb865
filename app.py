@@ -4,6 +4,8 @@ from flask_socketio import SocketIO
 from flask_cors import CORS
 
 players = []
+board = ['', '', '', '', '', '', '', '', '']
+moves = 0
 
 app = Flask(__name__, static_folder='./build/static')
 
@@ -47,7 +49,18 @@ def on_update_players(username):
 
 @socketio.on('move')
 def on_move(data):
+    global board, moves
+    moves = moves + 1
+    temp = board
+    board = board[0:data['move']['index']]
+    board.append(data['move']['symbol'])
+    board.extend(temp[data['move']['index'] + 1:])
     socketio.emit('move',  data, broadcast=True, include_self=False)
+    
+@socketio.on('initBoard')
+def on_init_board(socketId):
+    global board
+    socketio.emit('initBoard', {'board': board, 'moves': moves}, room=socketId)
     
 @socketio.on('victory')
 def on_victory(victor):
@@ -59,6 +72,9 @@ def on_draw():
 
 @socketio.on('playAgain')
 def on_play_again(userType):
+    global board, moves
+    board = ['', '', '', '', '', '', '', '', '']
+    moves = 0
     socketio.emit('playAgain', userType, broadcast=True)
     
 socketio.run(
