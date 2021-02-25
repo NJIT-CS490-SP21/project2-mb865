@@ -6,6 +6,9 @@ from flask_cors import CORS
 players = []
 board = ['', '', '', '', '', '', '', '', '']
 moves = 0
+victor = None
+gameOver = False
+playAgainCheck = ['not ready', 'not ready']
 
 app = Flask(__name__, static_folder='./build/static')
 
@@ -59,22 +62,39 @@ def on_move(data):
     
 @socketio.on('initBoard')
 def on_init_board(socketId):
-    global board
-    socketio.emit('initBoard', {'board': board, 'moves': moves}, room=socketId)
+    global board, moves, victor, gameOver
+    socketio.emit('initBoard', {'board': board, 'moves': moves, 'victor': victor, 'gameOver': gameOver, 'playAgainCheck': playAgainCheck}, room=socketId)
     
 @socketio.on('victory')
-def on_victory(victor):
+def on_victory(victorName):
+    global victor, gameOver
+    victor = victorName
+    gameOver = True
     socketio.emit('victory', victor, broadcast=True)
     
 @socketio.on('draw')
 def on_draw():
+    global victor, gameOver
+    gameOver = True
     socketio.emit('draw', broadcast=True)
 
 @socketio.on('playAgain')
 def on_play_again(userType):
-    global board, moves
-    board = ['', '', '', '', '', '', '', '', '']
-    moves = 0
+    global playAgainCheck, board, moves
+    prev = playAgainCheck
+    if userType == 'X':
+        playAgainCheck = ['ready', prev[1]]
+    elif userType == 'O':
+        playAgainCheck = [prev[0], 'ready']
+        
+    if playAgainCheck[0] == 'ready' and playAgainCheck[1] == 'ready':
+        print('reseting board in server')
+        board = ['', '', '', '', '', '', '', '', '']
+        moves = 0
+        victor = None
+        gameOver = False
+        playAgainCheck = ['not ready', 'not ready']
+        
     socketio.emit('playAgain', userType, broadcast=True)
     
 socketio.run(

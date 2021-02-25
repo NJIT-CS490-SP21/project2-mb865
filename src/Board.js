@@ -9,7 +9,7 @@ export function Board(props) {
   const [moves, setMoves] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [victor, setVictor] = useState(null);
-  const [playAgainCheck, setPlayAgainCheck] = useState(['not ready', 'not ready'])
+  const [playAgainCheck, setPlayAgainCheck] = useState(['not ready', 'not ready']);
   
   function onClickBox(index) {
     if (board[index] != '' || gameOver) return;
@@ -105,7 +105,10 @@ export function Board(props) {
     props.socket.on('initBoard', (boardData) => {
       console.log('initializing my board');
       setBoard(boardData.board);
-      setMoves(boardData.moves)
+      setMoves(boardData.moves);
+      setGameOver(boardData.gameOver);
+      setVictor(boardData.victor);
+      setPlayAgainCheck(boardData.playAgainCheck);
     });
     props.socket.on('move', (data) => {
       setBoard((prevBoard) => [...prevBoard.slice(0, data.move.index), data.move.symbol, ...prevBoard.slice(data.move.index + 1)]);
