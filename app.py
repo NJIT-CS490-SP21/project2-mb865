@@ -80,7 +80,7 @@ def on_draw():
 
 @socketio.on('playAgain')
 def on_play_again(userType):
-    global playAgainCheck, board, moves
+    global playAgainCheck, board, moves, gameOver, victor
     prev = playAgainCheck
     if userType == 'X':
         playAgainCheck = ['ready', prev[1]]
