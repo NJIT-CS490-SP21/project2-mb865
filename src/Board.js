@@ -149,10 +149,6 @@ export function Board(props) {
     return (
       <div className="main-container">
         <h2>{props.username} ({props.userType})</h2>
-        <h3>{victor ? victor + ' has won!' : 'Draw!!'}</h3>
-        <h5>Player X is {playAgainCheck[0]} to play again</h5>
-        <h5>Player O is {playAgainCheck[1]} to play again</h5>
-        <button onClick={() => onPlayAgain(props.userType)}>Play Again?</button>
         <div className="board-container">
           <Users players = {props.players}/>
           <div className="board">
@@ -162,6 +158,10 @@ export function Board(props) {
           </div>
           <h2>Leaderboard</h2>
         </div>
+        <h3>{victor ? victor + ' has won!' : 'Draw!!'}</h3>
+        <h5>Player X is {playAgainCheck[0]} to play again</h5>
+        <h5>Player O is {playAgainCheck[1]} to play again</h5>
+        <button onClick={() => onPlayAgain(props.userType)}>Play Again?</button>
       </div>
     );
 }
