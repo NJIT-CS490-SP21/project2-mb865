@@ -154,6 +154,7 @@ export function Board(props) {
         <h5>Player O is {playAgainCheck[1]} to play again</h5>
         <button onClick={() => onPlayAgain(props.userType)}>Play Again?</button>
         <div className="board-container">
+          <Users players = {props.players}/>
           <div className="board">
             {board.map((piece, index) => {
                 return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />

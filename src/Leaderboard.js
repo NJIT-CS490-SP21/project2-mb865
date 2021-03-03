@@ -1,4 +1,4 @@
-import './Box.css';
+import './Leaderboard.css';
 
 export function Box(props) {
 
