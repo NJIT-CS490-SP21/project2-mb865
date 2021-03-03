@@ -12,6 +12,7 @@ export function Board(props) {
   const [gameOver, setGameOver] = useState(false);
   const [victor, setVictor] = useState(null);
   const [playAgainCheck, setPlayAgainCheck] = useState(['not ready', 'not ready']);
+  const [leaderboard, setLeaderboard] = useState([]);
   
   function onClickBox(index) {
     if (board[index] != '' || gameOver) return;
@@ -105,12 +106,15 @@ export function Board(props) {
   
   useEffect(() => {
     props.socket.on('initBoard', (boardData) => {
-      console.log('initializing my board');
       setBoard(boardData.board);
       setMoves(boardData.moves);
       setGameOver(boardData.gameOver);
       setVictor(boardData.victor);
       setPlayAgainCheck(boardData.playAgainCheck);
+    });
+    props.socket.on('initLeaderboard', (topTen) => {
+      console.log('initializing my leaderboard');
+      setLeaderboard(topTen);
     });
     props.socket.on('move', (data) => {
       setBoard((prevBoard) => [...prevBoard.slice(0, data.move.index), data.move.symbol, ...prevBoard.slice(data.move.index + 1)]);
@@ -142,7 +146,7 @@ export function Board(props) {
                 return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
             })}
           </div>
-          <Leaderboard />
+          <Leaderboard topTen = {leaderboard}/>
         </div>
       </div>
     );

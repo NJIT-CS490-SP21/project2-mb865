@@ -86,13 +86,9 @@ def on_init_board(socketId):
 def on_init_leaderboard(socketId):
     all_players = models.Player.query.all()
     all_players.sort(key=lambda x: x.points, reverse=True)
-    top_ten = []
+    top_ten = {}
     for player in all_players[:10]:
-        newPlayer = {}
-        newPlayer['username'] = player.username
-        newPlayer['points'] = player.points
-        top_ten.append(newPlayer)
-    print(top_ten)
+        top_ten['username'] = player.username
     socketio.emit('initLeaderboard', top_ten, room=socketId)    
     
 @socketio.on('victory')
