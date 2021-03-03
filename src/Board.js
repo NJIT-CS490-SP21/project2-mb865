@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box } from './Box.js';
+import { Users } from './Users.js';
 import './Board.css';
 
 let lastIndex = 0;
@@ -131,27 +132,34 @@ export function Board(props) {
 
   if (!gameOver) 
     return (
-      <div className="board-container">
+      <div className="main-container">
         <h2>{props.username} ({props.userType})</h2>
-        <div className="board">
-          {board.map((piece, index) => {
-              return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
-          })}
+        <div className="board-container">
+          <Users players = {props.players}/>
+          <div className="board">
+            {board.map((piece, index) => {
+                return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
+            })}
+          </div>
+          <h2>Leaderboard</h2>
         </div>
       </div>
     );
   else
     return (
-      <div className="board-container">
+      <div className="main-container">
         <h2>{props.username} ({props.userType})</h2>
         <h3>{victor ? victor + ' has won!' : 'Draw!!'}</h3>
         <h5>Player X is {playAgainCheck[0]} to play again</h5>
         <h5>Player O is {playAgainCheck[1]} to play again</h5>
         <button onClick={() => onPlayAgain(props.userType)}>Play Again?</button>
-        <div className="board">
-          {board.map((piece, index) => {
-              return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
-          })}
+        <div className="board-container">
+          <div className="board">
+            {board.map((piece, index) => {
+                return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
+            })}
+          </div>
+          <h2>Leaderboard</h2>
         </div>
       </div>
     );

@@ -3,7 +3,6 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import { Board } from './Board.js';
-import { Users } from './Users.js';
 import { Login } from './Login.js';
 import { Header } from './Header.js';
 
@@ -56,8 +55,7 @@ function App() {
     return (
       <div>
         <Header />
-        <Board socket = {socket} userType = {userType} username={username}/>
-        <Users players = {players}/>
+        <Board players = {players} socket = {socket} userType = {userType} username={username}/>
       </div>
     );
   else
