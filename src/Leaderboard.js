@@ -5,7 +5,6 @@ export function Leaderboard(props) {
     const [showTopTen, setShowTopTen] = useState(false);
     
     function onToggleTopTen() {
-        console.log(props.topTen);
         setShowTopTen((prevIsShown) => {
           return !prevIsShown;
         });
@@ -15,9 +14,9 @@ export function Leaderboard(props) {
   return (
       <div >
         <h2>Leaderboard</h2>
-        <button onClick={onToggleTopTen}>Show top 10</button>
         {showTopTen === true ? (
         <div>
+        <button onClick={onToggleTopTen}>Hide top 10</button>
           <table>
             <thead>
                 <tr>
@@ -26,27 +25,17 @@ export function Leaderboard(props) {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>username</td>
-                    <td>points</td>
-                </tr>
-                <tr>
-                    <td>username</td>
-                    <td>points</td>
-                </tr>
-                <tr>
-                    <td>username</td>
-                    <td>points</td>
-                </tr>
-                <tr>
-                    <td>username</td>
-                    <td>points</td>
-                </tr>
+               {props.topTen.map((player, index) => {
+                return  <tr>
+                          <td>{++index}. {player.username}</td>
+                          <td>{player.points}</td>
+                        </tr>
+                })}
             </tbody>
           </table>
         </div>
       ) : (
-        <div></div>
+        <div><button onClick={onToggleTopTen}>Show top 10</button></div>
       )}
       </div>
   );

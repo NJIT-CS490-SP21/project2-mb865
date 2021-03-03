@@ -1,9 +1,11 @@
 td {
     padding-right: 1.5rem;
     padding-left: 1.5rem;
+    padding-bottom: 0.7rem;
     font-size: 0.8rem;
 }
 
 th {
     padding-bottom: 1rem;
+    padding-right: 1rem;
 }
