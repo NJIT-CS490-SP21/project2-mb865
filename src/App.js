@@ -17,6 +17,7 @@ function App() {
       setUsername(inputValue);
       setPlayers(prevPlayers => [...prevPlayers, [inputValue, socket.id]]);
       socket.emit('initBoard', socket.id);
+      socket.emit('initLeaderboard');
     }
   }
   

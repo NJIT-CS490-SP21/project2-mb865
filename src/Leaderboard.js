@@ -1,11 +1,52 @@
+import { useState } from 'react';
 import './Leaderboard.css';
 
-export function Box(props) {
+export function Leaderboard(props) {
+    const [showTopTen, setShowTopTen] = useState(false);
+    
+    function onToggleTopTen() {
+        setShowTopTen((prevIsShown) => {
+          return !prevIsShown;
+        });
+    }
 
   
   return (
-      <div className="box" onClick={props.onClick}>
-        {props.piece === 'X' ? <span className="piece x">{props.piece}</span> : <span className="piece o">{props.piece}</span>}
+      <div >
+        <h2>Leaderboard</h2>
+        <button onClick={onToggleTopTen}>Show top 10</button>
+        {showTopTen === true ? (
+        <div>
+          <table>
+            <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>username</td>
+                    <td>points</td>
+                </tr>
+                <tr>
+                    <td>username</td>
+                    <td>points</td>
+                </tr>
+                <tr>
+                    <td>username</td>
+                    <td>points</td>
+                </tr>
+                <tr>
+                    <td>username</td>
+                    <td>points</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div></div>
+      )}
       </div>
   );
 }

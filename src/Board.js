@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box } from './Box.js';
 import { Users } from './Users.js';
+import { Leaderboard } from './Leaderboard.js';
 import './Board.css';
 
 let lastIndex = 0;
@@ -141,7 +142,7 @@ export function Board(props) {
                 return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
             })}
           </div>
-          <h2>Leaderboard</h2>
+          <Leaderboard />
         </div>
       </div>
     );
@@ -156,7 +157,7 @@ export function Board(props) {
                 return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
             })}
           </div>
-          <h2>Leaderboard</h2>
+          <Leaderboard />
         </div>
         <h3>{victor ? victor + ' has won!' : 'Draw!!'}</h3>
         <h5>Player X is {playAgainCheck[0]} to play again</h5>

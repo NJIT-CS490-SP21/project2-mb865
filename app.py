@@ -1,8 +1,13 @@
 import os
-from flask import Flask, send_from_directory, json, session, request
+from flask import Flask, send_from_directory, json, request
 from flask_socketio import SocketIO
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv, find_dotenv
 
+load_dotenv(find_dotenv())
+
+# Global Variables
 players = []
 board = ['', '', '', '', '', '', '', '', '']
 moves = 0
@@ -12,8 +17,14 @@ playAgainCheck = ['not ready', 'not ready']
 
 app = Flask(__name__, static_folder='./build/static')
 
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
+import models
+db.create_all()
+
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(
     app,
     cors_allowed_origins="*",
@@ -46,6 +57,12 @@ def on_disconnect():
 @socketio.on('updatePlayers')
 def on_update_players(username):
     global players
+    player = models.Player.query.filter_by(username=username).first()
+    if player == None:
+        newPlayer = models.Player(username=username)
+        db.session.add(newPlayer)
+        db.session.commit()
+
     players.append([username, request.sid])
     socketio.emit('updatePlayers',  players, broadcast=True, include_self=False)
 
@@ -97,8 +114,10 @@ def on_play_again(userType):
         
     socketio.emit('playAgain', userType, broadcast=True)
     
-socketio.run(
-    app,
-    host=os.getenv('IP', '0.0.0.0'),
-    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
-)
+# Note we need to add this line so we can import app in the python shell
+if __name__ == "__main__":
+    socketio.run(
+        app,
+        host=os.getenv('IP', '0.0.0.0'),
+        port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+    )
