@@ -54,27 +54,32 @@ export function Board(props) {
     const checkSideDiagonal = [2,4,6].includes(index);
     const sideDiagonalCheck = board[2] + board[4] + board[6]
     
+    
     // check if previous move caused a win on vertical line 
-    if (verticalCheck === 'XXX' || verticalCheck === 'OOO')
+    if (verticalCheck === 'XXX' || verticalCheck === 'OOO') {
       return 'victory';
+    }
 
     // check if previous move caused a win on horizontal line 
-    if (horizontalCheck === 'XXX' || horizontalCheck === 'OOO')
+    if (horizontalCheck === 'XXX' || horizontalCheck === 'OOO') {
       return 'victory';
+    }
 
     // check if previous move was on the main diagonal and caused a win
-    if (checkMainDiagonal && (mainDiagonalCheck === 'XXX' || mainDiagonalCheck === 'OOO'))
+    if (checkMainDiagonal && (mainDiagonalCheck === 'XXX' || mainDiagonalCheck === 'OOO')) {
       return 'victory';
+    }
 
     // check if previous move was on the secondary diagonal and caused a win
-    if (checkSideDiagonal && (sideDiagonalCheck === 'XXX' || sideDiagonalCheck === 'OOO'))
+    if (checkSideDiagonal && (sideDiagonalCheck === 'XXX' || sideDiagonalCheck === 'OOO')) {
       return 'victory';
+    }
     
     // check if a draw
     if (moves == 9)
       return 'draw';
     
-    
+
   }
   
   function onPlayAgain(userType) {
@@ -113,13 +118,14 @@ export function Board(props) {
       setPlayAgainCheck(boardData.playAgainCheck);
     });
     props.socket.on('initLeaderboard', (topTen) => {
-      setLeaderboard(topTen);
+      setLeaderboard((prevLeaderboard) => prevLeaderboard = topTen);
     });
     props.socket.on('move', (data) => {
       setBoard((prevBoard) => [...prevBoard.slice(0, data.move.index), data.move.symbol, ...prevBoard.slice(data.move.index + 1)]);
       setMoves((prevMoves) => prevMoves + 1);
     });
     props.socket.on('victory', (victor) => {
+      if (props.username == victor) props.socket.emit('updateLeaderboards');
       setVictor(victor);
       setGameOver(true);
     });

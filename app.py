@@ -84,8 +84,7 @@ def on_init_board(socketId):
     
 @socketio.on('initLeaderboard')
 def on_init_leaderboard(socketId):
-    all_players = models.Player.query.all()
-    all_players.sort(key=lambda x: x.points, reverse=True)
+    all_players = models.Player.query.order_by(models.Player.points.desc())
     top_ten = []
     for player in all_players[:10]:
         newPlayer = {}
@@ -101,8 +100,8 @@ def on_victory(victorName):
         db_victor = db.session.query(models.Player).filter_by(username=players[0][0]).first()
         db_loser = db.session.query(models.Player).filter_by(username=players[1][0]).first()
     else:
-        db_victor = models.Player.query.filter_by(username=players[1][0]).first()
-        db_loser = models.Player.query.filter_by(username=players[0][0]).first()
+        db_victor = db.session.query(models.Player).filter_by(username=players[1][0]).first()
+        db_loser = db.session.query(models.Player).filter_by(username=players[0][0]).first()
     
     db_victor.points = db_victor.points + 1
     db_loser.points = db_loser.points - 1
@@ -110,13 +109,11 @@ def on_victory(victorName):
     victor = victorName
     gameOver = True
     socketio.emit('victory', victor, broadcast=True)
-    update_leaderboards()
     
+@socketio.on('updateLeaderboards')
 def update_leaderboards():
-    all_players = models.Player.query.all()
-    all_players.sort(key=lambda x: x.points, reverse=True)
+    all_players = all_players = models.Player.query.order_by(models.Player.points.desc())
     top_ten = []
-    print('here')
     for player in all_players[:10]:
         newPlayer = {}
         newPlayer['username'] = player.username
@@ -140,7 +137,6 @@ def on_play_again(userType):
         playAgainCheck = [prev[0], 'ready']
         
     if playAgainCheck[0] == 'ready' and playAgainCheck[1] == 'ready':
-        print('reseting board in server')
         board = ['', '', '', '', '', '', '', '', '']
         moves = 0
         victor = None
