@@ -14,8 +14,9 @@ function App() {
   
   function onLogin(inputValue) {
     if (inputValue != null) {
-      setUsername(inputValue);
-      setPlayers(prevPlayers => [...prevPlayers, [inputValue, socket.id]]);
+      const username = inputValue[0].toUpperCase() + inputValue.slice(1).toLowerCase();
+      setUsername(username);
+      setPlayers(prevPlayers => [...prevPlayers, [username, socket.id]]);
       socket.emit('initBoard', socket.id);
     }
   }
