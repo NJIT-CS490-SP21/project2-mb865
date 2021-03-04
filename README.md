@@ -41,6 +41,7 @@ Socket Io is a web socket library used to update different sessions with the cur
 * I couldn't keep track of which socket belonged to which user in order to just emit socket events to specific users. I fixed this by using request.sid to obtain the id of the socket and placed it in a list next to the associated username.
 ### b. What are known problems, if any, with your project?
 * The code overall feels messy and I would like to do some refactoring with it.
+* I get errors when too many connections are trying to access the database at once in order to get updated the updated leaderboard
 ### c. What would you do to improve your project in the future?
 * Improve the code so it is easier to follow
 * Improve the styling
