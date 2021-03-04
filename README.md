@@ -36,8 +36,14 @@ Socket Io is a web socket library used to update different sessions with the cur
 
 ## Discoveries
 ### a. What are at least 3 technical issues you encountered with your project? How did you fix them?
+* Sometimes my sockets were just not emitting and I solved the problem by not attempting to emit two socket events from one socket listener in the app.py
+* My socket events were instantiated twice and I noticed this because my sockets would emit two connect and disconnect events when a new tab opened the web page. I fixxed this by getting rid of the extra instantiation of socketio in my board componnet and passed the one from my App.js component as a props
+* I couldn't keep track of which socket belonged to which user in order to just emit socket events to specific users. I fixed this by using request.sid to obtain the id of the socket and placed it in a list next to the associated username.
 ### b. What are known problems, if any, with your project?
+* The code overall feels messy and I would like to do some refactoring with it.
 ### c. What would you do to improve your project in the future?
+* Improve the code so it is easier to follow
+* Improve the styling
 
 
 ## Deploy to Heroku
