@@ -151,7 +151,7 @@ export function Board(props) {
                 return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
             })}
           </div>
-          <Leaderboard topTen = {leaderboard}/>
+          <Leaderboard username = {props.username} topTen = {leaderboard}/>
         </div>
       </div>
     );
@@ -166,7 +166,7 @@ export function Board(props) {
                 return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
             })}
           </div>
-          <Leaderboard topTen = {leaderboard}/>
+          <Leaderboard username = {props.username} topTen = {leaderboard}/>
         </div>
         <h3>{victor ? victor + ' has won!' : 'Draw!!'}</h3>
         <h5>Player X is {playAgainCheck[0]} to play again</h5>

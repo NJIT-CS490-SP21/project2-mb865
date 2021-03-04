@@ -5,6 +5,7 @@ export function Leaderboard(props) {
     const [showTopTen, setShowTopTen] = useState(false);
     
     function onToggleTopTen() {
+      console.log(props.username);
         setShowTopTen((prevIsShown) => {
           return !prevIsShown;
         });
@@ -27,8 +28,8 @@ export function Leaderboard(props) {
             <tbody>
                {props.topTen.map((player, index) => {
                 return  <tr key={index}>
-                          <td>{++index}. {player.username}</td>
-                          <td>{player.points}</td>
+                          <td className={props.username == player.username ? 'you' : ''}>{++index}. {player.username}</td>
+                          <td className={props.username == player.username ? 'you' : ''}>{player.points}</td>
                         </tr>
                 })}
             </tbody>
