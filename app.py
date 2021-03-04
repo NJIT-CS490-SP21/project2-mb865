@@ -22,7 +22,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 import models
-db.create_all()
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(
@@ -41,8 +40,9 @@ def index(filename):
 
 @socketio.on('connect')
 def on_connect():
-    global players
-    socketio.emit('updatePlayers', players, broadcast=True)
+    # global players
+    # socketio.emit('updatePlayers', players, broadcast=True)
+    print('new socket ' + request.sid)
 
 
 @socketio.on('disconnect')
@@ -51,6 +51,8 @@ def on_disconnect():
     for player in players:
         if player[1] == request.sid:
             players.remove(player)
+            
+    print('socket leaving ' + request.sid)
     socketio.emit('removePlayer', players, broadcast=True)
 
 
@@ -64,8 +66,8 @@ def on_update_players(username):
         db.session.commit()
         print("new player added into db")
 
-    print("updatedplayers")
     players.append([username, request.sid])
+    print('updatePlayers to all sockets')
     socketio.emit('updatePlayers',  players, broadcast=True)
 
 
@@ -82,6 +84,7 @@ def on_move(data):
 @socketio.on('initBoard')
 def on_init_board(socketId):
     global board, moves, victor, gameOver
+    print('initBoard to ' + request.sid)
     socketio.emit('initBoard', {'board': board, 'moves': moves, 'victor': victor, 'gameOver': gameOver, 'playAgainCheck': playAgainCheck}, room=socketId)
     
 @socketio.on('initLeaderboard')
@@ -93,7 +96,7 @@ def on_init_leaderboard(socketId):
         newPlayer['username'] = player.username
         newPlayer['points'] = player.points
         top_ten.append(newPlayer)
-    print(top_ten)
+    print('initLeaderboard to ' + socketId)
     socketio.emit('initLeaderboard', top_ten, room=socketId)   
     
 @socketio.on('victory')

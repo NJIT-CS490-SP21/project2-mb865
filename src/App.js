@@ -14,9 +14,10 @@ function App() {
   
   function onLogin(inputValue) {
     if (inputValue != null) {
+      console.log('logging in');
       const username = inputValue[0].toUpperCase() + inputValue.slice(1).toLowerCase();
       setUsername(username);
-      setPlayers(prevPlayers => [...prevPlayers, [username, socket.id]]);
+      // setPlayers(prevPlayers => [...prevPlayers, [username, socket.id]]);
       socket.emit('initBoard', socket.id);
     }
   }
@@ -29,14 +30,22 @@ function App() {
     } else {
       setUserType('spectator');
     }
+    console.log('found player type');
   }
   
   useEffect(() => { 
-    if (username) {
-      findUserType(players.length - 1);
+    if (username !== null) {
+      console.log('updating players');
       socket.emit('updatePlayers', username);
     }
   }, [username])
+  
+  useEffect(() => { 
+    if (userType === null && players.length > 0) {
+      console.log('finding type');
+      findUserType(players.length - 1);
+    }
+  }, [players])
   
   useEffect(() => {
     socket.on('updatePlayers', (updatedPlayers) => {
@@ -46,12 +55,13 @@ function App() {
     socket.on('removePlayer', (updatedPlayers) => {
       setPlayers(updatedPlayers);
       const findPlayer = (player) => player[1] == socket.id;
-      const position = updatedPlayers.findIndex(findPlayer)
-      findUserType(position)
+      const position = updatedPlayers.findIndex(findPlayer);
+      findUserType(position);
+      console.log('removing player, new type is ', findUserType(position));
     });
   }, []);
 
-  if (username)
+  if (username !== null)
     return (
       <div>
         <Header />

@@ -1,14 +1,14 @@
 import './Users.css';
 
 export function Users(props) {
-    if (props.players.length == 1) {
+    if (props.players.length === 1) {
         return (
             <div className="user-container">
                 <h2>Player List</h2>
                 <p>Player X: {props.players[0][0]}</p>
             </div>
         );
-    } else if (props.players.length == 2) {
+    } else if (props.players.length === 2) {
         return (
             <div className="user-container">
                 <h2>Player List</h2>
@@ -16,7 +16,7 @@ export function Users(props) {
                 <p>Player O: {props.players[1][0]}</p>
             </div>
         );
-    } else {
+    } else if (props.players.length >= 2) {
         return (
             <div className="user-container">
                 <h2>Player List</h2>
@@ -30,6 +30,8 @@ export function Users(props) {
                 })}
             </div>
         );
+    } else {
+        return null;
     }
   
 }
