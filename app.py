@@ -92,15 +92,37 @@ def on_init_leaderboard(socketId):
         newPlayer['username'] = player.username
         newPlayer['points'] = player.points
         top_ten.append(newPlayer)
-    print(top_ten)
-    socketio.emit('initLeaderboard', top_ten, room=socketId)    
+    socketio.emit('initLeaderboard', top_ten, room=socketId)   
     
 @socketio.on('victory')
 def on_victory(victorName):
-    global victor, gameOver
+    global victor, gameOver, players
+    if victorName == players[0][0]:
+        db_victor = db.session.query(models.Player).filter_by(username=players[0][0]).first()
+        db_loser = db.session.query(models.Player).filter_by(username=players[1][0]).first()
+    else:
+        db_victor = models.Player.query.filter_by(username=players[1][0]).first()
+        db_loser = models.Player.query.filter_by(username=players[0][0]).first()
+    
+    db_victor.points = db_victor.points + 1
+    db_loser.points = db_loser.points - 1
+    db.session.commit()
     victor = victorName
     gameOver = True
     socketio.emit('victory', victor, broadcast=True)
+    update_leaderboards()
+    
+def update_leaderboards():
+    all_players = models.Player.query.all()
+    all_players.sort(key=lambda x: x.points, reverse=True)
+    top_ten = []
+    print('here')
+    for player in all_players[:10]:
+        newPlayer = {}
+        newPlayer['username'] = player.username
+        newPlayer['points'] = player.points
+        top_ten.append(newPlayer)
+    socketio.emit('initLeaderboard', top_ten, broadcast=True)  
     
 @socketio.on('draw')
 def on_draw():

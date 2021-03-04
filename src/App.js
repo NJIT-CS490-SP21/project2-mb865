@@ -17,7 +17,6 @@ function App() {
       setUsername(inputValue);
       setPlayers(prevPlayers => [...prevPlayers, [inputValue, socket.id]]);
       socket.emit('initBoard', socket.id);
-      socket.emit('initLeaderboard', socket.id);
     }
   }
   
@@ -35,6 +34,7 @@ function App() {
     if (username) {
       findUserType(players.length - 1);
       socket.emit('updatePlayers', username);
+      socket.emit('initLeaderboard', socket.id);
     }
   }, [username])
   

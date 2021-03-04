@@ -26,7 +26,7 @@ export function Leaderboard(props) {
             </thead>
             <tbody>
                {props.topTen.map((player, index) => {
-                return  <tr>
+                return  <tr key={index}>
                           <td>{++index}. {player.username}</td>
                           <td>{player.points}</td>
                         </tr>

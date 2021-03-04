@@ -113,7 +113,6 @@ export function Board(props) {
       setPlayAgainCheck(boardData.playAgainCheck);
     });
     props.socket.on('initLeaderboard', (topTen) => {
-      console.log('initializing my leaderboard');
       setLeaderboard(topTen);
     });
     props.socket.on('move', (data) => {
@@ -161,7 +160,7 @@ export function Board(props) {
                 return <Box onClick={() => onClickBox(index)} key={index} piece={piece} />
             })}
           </div>
-          <Leaderboard />
+          <Leaderboard topTen = {leaderboard}/>
         </div>
         <h3>{victor ? victor + ' has won!' : 'Draw!!'}</h3>
         <h5>Player X is {playAgainCheck[0]} to play again</h5>
