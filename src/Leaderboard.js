@@ -5,7 +5,6 @@ export function Leaderboard(props) {
     const [showTopTen, setShowTopTen] = useState(false);
     
     function onToggleTopTen() {
-      console.log(props.username);
         setShowTopTen((prevIsShown) => {
           return !prevIsShown;
         });

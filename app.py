@@ -62,9 +62,11 @@ def on_update_players(username):
         newPlayer = models.Player(username=username)
         db.session.add(newPlayer)
         db.session.commit()
+        print("new player added into db")
 
+    print("updatedplayers")
     players.append([username, request.sid])
-    socketio.emit('updatePlayers',  players, broadcast=True, include_self=False)
+    socketio.emit('updatePlayers',  players, broadcast=True)
 
 
 @socketio.on('move')
@@ -91,6 +93,7 @@ def on_init_leaderboard(socketId):
         newPlayer['username'] = player.username
         newPlayer['points'] = player.points
         top_ten.append(newPlayer)
+    print(top_ten)
     socketio.emit('initLeaderboard', top_ten, room=socketId)   
     
 @socketio.on('victory')
@@ -114,6 +117,7 @@ def on_victory(victorName):
 def update_leaderboards():
     all_players = all_players = models.Player.query.order_by(models.Player.points.desc())
     top_ten = []
+    print(all_players)
     for player in all_players[:10]:
         newPlayer = {}
         newPlayer['username'] = player.username

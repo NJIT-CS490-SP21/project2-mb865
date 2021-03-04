@@ -35,14 +35,13 @@ function App() {
     if (username) {
       findUserType(players.length - 1);
       socket.emit('updatePlayers', username);
-      socket.emit('initLeaderboard', socket.id);
     }
   }, [username])
-  
   
   useEffect(() => {
     socket.on('updatePlayers', (updatedPlayers) => {
       setPlayers(updatedPlayers);
+      socket.emit('initLeaderboard', socket.id);
     });
     socket.on('removePlayer', (updatedPlayers) => {
       setPlayers(updatedPlayers);
