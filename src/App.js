@@ -41,7 +41,7 @@ function App() {
   }, [username])
   
   useEffect(() => { 
-    if (userType === null && players.length > 0) {
+    if (username !== null && userType === null && players.length > 0) {
       console.log('finding type');
       findUserType(players.length - 1);
     }
@@ -57,7 +57,7 @@ function App() {
       const findPlayer = (player) => player[1] == socket.id;
       const position = updatedPlayers.findIndex(findPlayer);
       findUserType(position);
-      console.log('removing player, new type is ', findUserType(position));
+      console.log('removing player, getting new type');
     });
   }, []);
 
