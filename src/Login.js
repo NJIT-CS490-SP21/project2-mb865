@@ -1,7 +1,11 @@
-import { useRef } from "react";
-import "./Login.css";
+import { React, useRef } from 'react';
+import PropTypes from 'prop-types';
+import './Login.css';
 
-export function Login(props) {
+function Login(props) {
+  const {
+    onLogin
+  } = props;
   const inputRef = useRef(null); // Reference to <input> element
 
   return (
@@ -17,3 +21,9 @@ export function Login(props) {
     </div>
   );
 }
+
+Login.propTypes = {
+  onLogin: PropTypes.func.isRequired,
+};
+
+export default Login;
