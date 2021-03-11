@@ -1,13 +1,16 @@
-import { useState } from "react";
-import "./Leaderboard.css";
+import { React, useState } from 'react';
+import PropTypes from 'prop-types';
+import './Leaderboard.css';
 
-export function Leaderboard(props) {
+function Leaderboard(props) {
   const [showTopTen, setShowTopTen] = useState(false);
+  const {
+    topTen,
+    username,
+  } = props;
 
   function onToggleTopTen() {
-    setShowTopTen((prevIsShown) => {
-      return !prevIsShown;
-    });
+    setShowTopTen((prevIsShown) => !prevIsShown);
   }
 
   return (
@@ -15,7 +18,7 @@ export function Leaderboard(props) {
       <h2>Leaderboard</h2>
       {showTopTen === true ? (
         <div>
-          <button onClick={onToggleTopTen}>Hide top 10</button>
+          <button type="button" onClick={onToggleTopTen}>Hide top 10</button>
           <table>
             <thead>
               <tr>
@@ -24,30 +27,35 @@ export function Leaderboard(props) {
               </tr>
             </thead>
             <tbody>
-              {props.topTen.map((player, index) => {
-                return (
-                  <tr key={index}>
-                    <td
-                      className={props.username == player.username ? "you" : ""}
-                    >
-                      {++index}. {player.username}
-                    </td>
-                    <td
-                      className={props.username == player.username ? "you" : ""}
-                    >
-                      {player.points}
-                    </td>
-                  </tr>
-                );
-              })}
+              {topTen.map((player, index) => (
+                <tr key={index}>
+                  <td
+                    className={username === player.username ? 'you' : ''}
+                  >
+                    {`${index + 1}. ${player.username}`}
+                  </td>
+                  <td
+                    className={username === player.username ? 'you' : ''}
+                  >
+                    {player.points}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       ) : (
         <div>
-          <button onClick={onToggleTopTen}>Show top 10</button>
+          <button type="button" onClick={onToggleTopTen}>Show top 10</button>
         </div>
       )}
     </div>
   );
 }
+
+Leaderboard.propTypes = {
+  topTen: PropTypes.arrayOf(PropTypes.string).isRequired,
+  username: PropTypes.string.isRequired,
+};
+
+export default Leaderboard;
