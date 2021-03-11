@@ -1,9 +1,9 @@
-import "./App.css";
-import { useState, useEffect } from "react";
-import io from "socket.io-client";
-import { Board } from "./Board.js";
-import { Login } from "./Login.js";
-import { Header } from "./Header.js";
+import './App.css';
+import { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import { Board } from './Board.js';
+import { Login } from './Login.js';
+import { Header } from './Header.js';
 
 const socket = io(); // Connects to socket connection
 
@@ -14,51 +14,51 @@ function App() {
 
   function onLogin(inputValue) {
     if (inputValue != null) {
-      console.log("logging in");
+      console.log('logging in');
       const username =
         inputValue[0].toUpperCase() + inputValue.slice(1).toLowerCase();
       setUsername(username);
       // setPlayers(prevPlayers => [...prevPlayers, [username, socket.id]]);
-      socket.emit("initBoard", socket.id);
+      socket.emit('initBoard', socket.id);
     }
   }
 
   function findUserType(position) {
     if (position == 0) {
-      setUserType("X");
+      setUserType('X');
     } else if (position == 1) {
-      setUserType("O");
+      setUserType('O');
     } else {
-      setUserType("spectator");
+      setUserType('spectator');
     }
-    console.log("found player type");
+    console.log('found player type');
   }
 
   useEffect(() => {
     if (username !== null) {
-      console.log("updating players");
-      socket.emit("updatePlayers", username);
+      console.log('updating players');
+      socket.emit('updatePlayers', username);
     }
   }, [username]);
 
   useEffect(() => {
     if (username !== null && userType === null && players.length > 0) {
-      console.log("finding type");
+      console.log('finding type');
       findUserType(players.length - 1);
     }
   }, [players]);
 
   useEffect(() => {
-    socket.on("updatePlayers", (updatedPlayers) => {
+    socket.on('updatePlayers', (updatedPlayers) => {
       setPlayers(updatedPlayers);
-      socket.emit("initLeaderboard", socket.id);
+      socket.emit('initLeaderboard', socket.id);
     });
-    socket.on("removePlayer", (updatedPlayers) => {
+    socket.on('removePlayer', (updatedPlayers) => {
       setPlayers(updatedPlayers);
       const findPlayer = (player) => player[1] == socket.id;
       const position = updatedPlayers.findIndex(findPlayer);
       findUserType(position);
-      console.log("removing player, getting new type");
+      console.log('removing player, getting new type');
     });
   }, []);
 
