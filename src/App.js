@@ -1,9 +1,9 @@
-import './App.css';
 import { React, useState, useEffect } from 'react';
 import io from 'socket.io-client';
-import { Board } from './Board';
+import Board from './Board';
 import { Login } from './Login';
 import { Header } from './Header';
+import './App.css';
 
 const socket = io(); // Connects to socket connection
 
