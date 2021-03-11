@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { React, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import { Board } from './Board';
 import { Login } from './Login';
@@ -13,18 +13,17 @@ function App() {
   const [players, setPlayers] = useState([]);
 
   function onLogin(inputValue) {
-    if (inputValue != null) {
-      const aUsername =
-        inputValue[0].toUpperCase() + inputValue.slice(1).toLowerCase();
+    if (inputValue !== null) {
+      const aUsername = inputValue[0].toUpperCase() + inputValue.slice(1).toLowerCase();
       setUsername(aUsername);
       socket.emit('initBoard', socket.id);
     }
   }
 
   function findUserType(position) {
-    if (position == 0) {
+    if (position === 0) {
       setUserType('X');
-    } else if (position == 1) {
+    } else if (position === 1) {
       setUserType('O');
     } else {
       setUserType('spectator');
@@ -50,13 +49,13 @@ function App() {
     });
     socket.on('removePlayer', (updatedPlayers) => {
       setPlayers(updatedPlayers);
-      const findPlayer = (player) => player[1] == socket.id;
+      const findPlayer = (player) => player[1] === socket.id;
       const position = updatedPlayers.findIndex(findPlayer);
       findUserType(position);
     });
   }, []);
 
-  if (username !== null)
+  if (username !== null) {
     return (
       <div>
         <Header />
@@ -68,13 +67,13 @@ function App() {
         />
       </div>
     );
-  else
-    return (
-      <div>
-        <Header />
-        <Login onLogin={onLogin} />
-      </div>
-    );
+  }
+  return (
+    <div>
+      <Header />
+      <Login onLogin={onLogin} />
+    </div>
+  );
 }
 
 export default App;
