@@ -1,17 +1,23 @@
 .board {
-	width: 400px; /* Total horizontal dimensions */
-	height: 400px; /* Total vertical dimensions */
-	display: grid; /* Enables CSS Grid */ 
-	grid-template-columns: repeat(3, 1fr); /* Total horizontal space broken into 3 columns */
- 	grid-template-rows: repeat(3, 1fr); /* Total vertical space broken into 3 rows */
+  width: 400px; /* Total horizontal dimensions */
+  height: 400px; /* Total vertical dimensions */
+  display: grid; /* Enables CSS Grid */
+  grid-template-columns: repeat(
+    3,
+    1fr
+  ); /* Total horizontal space broken into 3 columns */
+  grid-template-rows: repeat(
+    3,
+    1fr
+  ); /* Total vertical space broken into 3 rows */
 }
 
 .main-container {
-	text-align: center;
+  text-align: center;
 }
 
 .board-container {
-	text-align: center;
-	display: flex;
-	justify-content: space-around;
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
 }

@@ -1,10 +1,10 @@
 body {
-  background: #FC354C;  
-  background: -webkit-linear-gradient(left, #0ABFBC, #FC354C);
-  background: -moz-linear-gradient(left, #0ABFBC, #FC354C);
-  background: -o-linear-gradient(left, #0ABFBC, #FC354C);
-  background: linear-gradient(to right, #0ABFBC, #FC354C);
-  font-family: 'Press Start 2P', cursive;
+  background: #fc354c;
+  background: -webkit-linear-gradient(left, #0abfbc, #fc354c);
+  background: -moz-linear-gradient(left, #0abfbc, #fc354c);
+  background: -o-linear-gradient(left, #0abfbc, #fc354c);
+  background: linear-gradient(to right, #0abfbc, #fc354c);
+  font-family: "Press Start 2P", cursive;
   color: #1f1f1f;
 }
 

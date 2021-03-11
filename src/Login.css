@@ -1,51 +1,52 @@
 input {
-    font-family: 'Press Start 2P', cursive;
-    width: 200px;
-    height: 30px;
-    border-radius: 1rem;
-    border-color: #4f4f4f;
-    border-style: solid;
-    background-color: #808080;
-    caret-color: #4f4f4f;
-    text-indent: 7px;
-    color: #1f1f1f;
+  font-family: "Press Start 2P", cursive;
+  width: 200px;
+  height: 30px;
+  border-radius: 1rem;
+  border-color: #4f4f4f;
+  border-style: solid;
+  background-color: #808080;
+  caret-color: #4f4f4f;
+  text-indent: 7px;
+  color: #1f1f1f;
 }
 
 input:focus {
-    outline: none;
+  outline: none;
 }
 
-input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: rgba(31,31,31,0.5);
+input::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgba(31, 31, 31, 0.5);
   text-align: center;
   opacity: 1; /* Firefox */
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
   font-size: 1rem;
 }
 
 button {
-    margin-top: 0.3rem;
-    margin-bottom: 1.3rem;
-    width: 200px;
-    height: 30px;
-    font-family: 'Press Start 2P', cursive;
-    border-radius: 1rem;
-    border-color: #4f4f4f;
-    border-style: solid;
-    background-color: #808080;
-    text-indent: 7px;
-    color: #1f1f1f;
+  margin-top: 0.3rem;
+  margin-bottom: 1.3rem;
+  width: 200px;
+  height: 30px;
+  font-family: "Press Start 2P", cursive;
+  border-radius: 1rem;
+  border-color: #4f4f4f;
+  border-style: solid;
+  background-color: #808080;
+  text-indent: 7px;
+  color: #1f1f1f;
 }
 
 button:focus {
-    outline: none;
+  outline: none;
 }
 
 button:hover {
-    background-color: #b3b3b3;
+  background-color: #b3b3b3;
 }
 
 .login-container {
-    margin-top: 25vh;
-    text-align: center;
+  margin-top: 25vh;
+  text-align: center;
 }

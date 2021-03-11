@@ -6,13 +6,13 @@
 }
 
 .piece {
-    font-size: 6rem;
+  font-size: 6rem;
 }
 
 .x {
-    color: #FC354C;
+  color: #fc354c;
 }
 
 .o {
-    color: #0ABFBC;
+  color: #0abfbc;
 }
