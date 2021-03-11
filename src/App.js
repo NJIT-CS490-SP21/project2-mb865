@@ -14,9 +14,9 @@ function App() {
 
   function onLogin(inputValue) {
     if (inputValue != null) {
-      const username =
+      const aUsername =
         inputValue[0].toUpperCase() + inputValue.slice(1).toLowerCase();
-      setUsername(username);
+      setUsername(aUsername);
       socket.emit('initBoard', socket.id);
     }
   }
