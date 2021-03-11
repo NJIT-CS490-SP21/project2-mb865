@@ -4,7 +4,7 @@ import './Login.css';
 
 function Login(props) {
   const {
-    onLogin
+    onLogin,
   } = props;
   const inputRef = useRef(null); // Reference to <input> element
 
@@ -14,7 +14,7 @@ function Login(props) {
       <br />
       <button
         type="submit"
-        onClick={() => props.onLogin(inputRef.current.value)}
+        onClick={() => onLogin(inputRef.current.value)}
       >
         Enter
       </button>

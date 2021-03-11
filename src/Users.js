@@ -30,7 +30,7 @@ function Users(props) {
         <p>{`Player X: ${players[0][0]}`}</p>
         <p>{`Player O: ${players[1][0]}`}</p>
         <h5>Queue</h5>
-        {players.slice(2).map((player, index) => <p key={index}>{`${index - 1} ${player[0]}`}</p>)}
+        {players.slice(2).map((player, index) => <p key={index}>{`${index + 1} ${player[0]}`}</p>)}
       </div>
     );
   }

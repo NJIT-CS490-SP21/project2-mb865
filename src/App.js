@@ -1,15 +1,15 @@
 import { React, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Board from './Board';
-import { Login } from './Login';
-import { Header } from './Header';
+import Login from './Login';
+import Header from './Header';
 import './App.css';
 
 const socket = io(); // Connects to socket connection
 
 function App() {
-  const [username, setUsername] = useState(null);
-  const [userType, setUserType] = useState(null);
+  const [username, setUsername] = useState('');
+  const [userType, setUserType] = useState('');
   const [players, setPlayers] = useState([]);
 
   function onLogin(inputValue) {
@@ -31,13 +31,13 @@ function App() {
   }
 
   useEffect(() => {
-    if (username !== null) {
+    if (username !== '') {
       socket.emit('updatePlayers', username);
     }
   }, [username]);
 
   useEffect(() => {
-    if (username !== null && userType === null && players.length > 0) {
+    if (username !== '' && userType === '' && players.length > 0) {
       findUserType(players.length - 1);
     }
   }, [players]);
@@ -55,7 +55,7 @@ function App() {
     });
   }, []);
 
-  if (username !== null) {
+  if (username !== '') {
     return (
       <div>
         <Header />

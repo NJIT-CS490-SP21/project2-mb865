@@ -54,7 +54,10 @@ function Leaderboard(props) {
 }
 
 Leaderboard.propTypes = {
-  topTen: PropTypes.arrayOf(PropTypes.string).isRequired,
+  topTen: PropTypes.arrayOf(PropTypes.shape({
+    username: PropTypes.string,
+    points: PropTypes.number,
+  })).isRequired,
   username: PropTypes.string.isRequired,
 };
 

@@ -1,8 +1,9 @@
 import { React, useState, useEffect } from 'react';
+import io from 'socket.io-client';
 import PropTypes from 'prop-types';
-import { Box } from './Box';
-import { Users } from './Users';
-import { Leaderboard } from './Leaderboard';
+import Box from './Box';
+import Users from './Users';
+import Leaderboard from './Leaderboard';
 import './Board.css';
 
 let lastIndex = 0;
@@ -175,7 +176,13 @@ function Board(props) {
           <Users players={players} />
           <div className="board">
             {board.map((piece, index) => (
-              <Box onClick={() => onClickBox(index)} key={index} piece={piece} />))}
+              <Box
+                onClick={() => onClickBox(index)}
+                key={index}
+                piece={piece}
+                tabIndex={index}
+              />
+            ))}
           </div>
           <Leaderboard username={username} topTen={leaderboard} />
         </div>
@@ -191,7 +198,7 @@ function Board(props) {
         <Users players={players} />
         <div className="board">
           {board.map((piece, index) => (
-            <Box onClick={() => onClickBox(index)} key={index} piece={piece} tabIndex={index}/>))}
+            <Box onClick={() => onClickBox(index)} key={index} piece={piece} tabIndex={index} />))}
         </div>
         <Leaderboard username={username} topTen={leaderboard} />
       </div>
@@ -207,7 +214,7 @@ Board.propTypes = {
   username: PropTypes.string.isRequired,
   userType: PropTypes.string.isRequired,
   players: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  socket: PropTypes.string.isRequired,
+  socket: PropTypes.instanceOf(io).isRequired,
 };
 
 export default Board;
