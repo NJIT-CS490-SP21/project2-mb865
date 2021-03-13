@@ -1,10 +1,16 @@
-from app import db
+"""
+This file creates the model for the database to use.
+"""
+from app import DB
 
 
-class Player(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    points = db.Column(db.Integer, default=100, nullable=False)
+class Player(DB.Model):
+    """
+    Model for Player in database.
+    """
+    id = DB.Column(DB.Integer, primary_key=True)
+    username = DB.Column(DB.String(80), unique=True, nullable=False)
+    points = DB.Column(DB.Integer, default=100, nullable=False)
 
     def __repr__(self):
         return '<Player %r>' % self.username
