@@ -68,21 +68,25 @@ def remove_player(players, sid):
 @SOCKET_IO.on('updatePlayers')
 def on_update_players(username):
     """
-    When a player logs in with a username, the database is queried using that username.
-    If no player is found in the database, then the new user is added to the database.
+    When a player logs in with a username, check if its a new user.
     The user logging in is then added to the global PLAYERS list. The new PLAYER list is
     then emitted to all other sockets to create a new user component.
     """
     global PLAYERS
     player = models.Player.query.filter_by(username=username).first()
     if player is None:
-        new_player = models.Player(username=username)
-        DB.session.add(new_player)
-        DB.session.commit()
-
+        add_player(username)
     PLAYERS.append([username, request.sid])
     SOCKET_IO.emit('updatePlayers', PLAYERS, broadcast=True)
 
+def add_player(username):
+    """
+    the database is queried using the username and if no player
+    is found in the database, then the new user is added to the database.
+    """
+    new_player = models.Player(username=username)
+    DB.session.add(new_player)
+    DB.session.commit()
 
 @SOCKET_IO.on('move')
 def on_move(data):
