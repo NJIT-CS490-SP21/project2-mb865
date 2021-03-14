@@ -45,18 +45,25 @@ def index(filename):
 @SOCKET_IO.on('disconnect')
 def on_disconnect():
     """
-    When a socket disconnects, this function finds the player assocatied with
+    When a socket disconnects, call remove_player
+    """
+    global PLAYERS
+    PLAYERS = remove_player(PLAYERS, request.sid)
+
+
+    SOCKET_IO.emit('removePlayer', PLAYERS, broadcast=True)
+    
+def remove_player(players, sid):
+    """
+    this function finds the player assocatied with
     the disconnecting socket and removes them from the global PLAYERS list.
     Then the new PLAYERS list is emitted to all other sockets to dispaly a new user component.
     """
-    global PLAYERS
-    for player in PLAYERS:
-        if player[1] == request.sid:
-            PLAYERS.remove(player)
-
-    print('socket leaving ' + request.sid)
-    SOCKET_IO.emit('removePlayer', PLAYERS, broadcast=True)
-
+    for player in players:
+        if player[1] == sid:
+            players.remove(player)
+            break
+    return players
 
 @SOCKET_IO.on('updatePlayers')
 def on_update_players(username):
@@ -81,19 +88,25 @@ def on_update_players(username):
 def on_move(data):
     """
     When a player X or player O makes a move, the global MOVES count is updated.
-    Next the global BOARD array is copied, the side to the right of the new move is
+    Next the global BOARD array is updated by the update_board function
+    """
+    global BOARD, MOVES
+    MOVES = MOVES + 1
+    BOARD = update_board(BOARD, data['move']['index'], data['move']['symbol'])
+    
+    SOCKET_IO.emit('move', data, broadcast=True, include_self=False)
+
+def update_board(board, index, symbol):
+    """
+    The side to the right of the new move is
     spliced off the BOARD array with the new move placed at the end. Then the right side is appended
     again using the copied temp array. This new BOARD is emitted to all other sockets to create
     a new Board component.
     """
-    global BOARD, MOVES
-    MOVES = MOVES + 1
-    temp = BOARD
-    BOARD = BOARD[0:data['move']['index']]
-    BOARD.append(data['move']['symbol'])
-    BOARD.extend(temp[data['move']['index'] + 1:])
-    SOCKET_IO.emit('move', data, broadcast=True, include_self=False)
-
+    new_board = board[0:index]
+    new_board.append(symbol)
+    new_board.extend(board[index + 1:])
+    return new_board
 
 @SOCKET_IO.on('initBoard')
 def on_init_board(socket_id):
@@ -188,16 +201,10 @@ def on_draw():
 @SOCKET_IO.on('playAgain')
 def on_play_again(user_type):
     """
-    This function is used to update the play again check for all users to display
-    when one or both users are ready to reset and play again.
+    check who is ready by calling the function and then reset game when both players are ready
     """
     global PLAY_AGAIN_CHECK, BOARD, MOVES, GAME_OVER, VICTOR
-    prev = PLAY_AGAIN_CHECK
-    if user_type == 'X':
-        PLAY_AGAIN_CHECK = ['ready', prev[1]]
-    elif user_type == 'O':
-        PLAY_AGAIN_CHECK = [prev[0], 'ready']
-
+    PLAY_AGAIN_CHECK = check_whos_ready(PLAY_AGAIN_CHECK, user_type)
     if PLAY_AGAIN_CHECK[0] == 'ready' and PLAY_AGAIN_CHECK[1] == 'ready':
         BOARD = ['', '', '', '', '', '', '', '', '']
         MOVES = 0
@@ -206,6 +213,18 @@ def on_play_again(user_type):
         PLAY_AGAIN_CHECK = ['not ready', 'not ready']
 
     SOCKET_IO.emit('playAgain', user_type, broadcast=True)
+
+def check_whos_ready(play_again_check, user_type):
+    """
+    This function checks to see what player type is ready'ing 
+    up and updating the play_again_check array
+    """
+    prev = play_again_check
+    if user_type == 'X':
+        play_again_check = ['ready', prev[1]]
+    elif user_type == 'O':
+        play_again_check = [prev[0], 'ready']
+    return play_again_check
 
 
 # Note we need to add this line so we can import app in the python shell
