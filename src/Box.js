@@ -9,14 +9,14 @@ function Box(props) {
     tabIndex,
   } = props;
   return (
-    <div tabIndex={tabIndex} role="button" className="box" onClick={onClick} onKeyDown={onClick}>
-      {piece === 'X' ? (
-        <span className="piece x">{piece}</span>
-      ) : (
-        <span className="piece o">{piece}</span>
-      )}
-    </div>
-  );
+      <div tabIndex={tabIndex} role="button" className="box" onClick={onClick} onKeyDown={onClick}>
+        {piece === 'X' ? (
+          <span className="piece x">{piece}</span>
+        ) : (
+          <span className="piece o">{piece}</span>
+        )}
+      </div>
+    );
 }
 
 Box.propTypes = {

@@ -134,42 +134,8 @@ def on_init_leaderboard(socket_id):
     This function is used to initalize the leaderboard for any newly logged in users
     and is emitted to that new user only.
     """
-    all_players = models.Player.query.order_by(models.Player.points.desc())
-    top_ten = []
-    for player in all_players[:10]:
-        new_player = {}
-        new_player['username'] = player.username
-        new_player['points'] = player.points
-        top_ten.append(new_player)
-    print('initLeaderboard to ' + socket_id)
+    top_ten = get_top_players(10)
     SOCKET_IO.emit('initLeaderboard', top_ten, room=socket_id)
-
-
-@SOCKET_IO.on('victory')
-def on_victory(victor_name):
-    """
-    If a victory is obtained on a move, this function is called to update the database
-    and emit the results to all users.
-    """
-    global VICTOR, GAME_OVER, PLAYERS
-    if victor_name == PLAYERS[0][0]:
-        db_victor = DB.session.query(
-            models.Player).filter_by(username=PLAYERS[0][0]).first()
-        db_loser = DB.session.query(
-            models.Player).filter_by(username=PLAYERS[1][0]).first()
-    else:
-        db_victor = DB.session.query(
-            models.Player).filter_by(username=PLAYERS[1][0]).first()
-        db_loser = DB.session.query(
-            models.Player).filter_by(username=PLAYERS[0][0]).first()
-
-    db_victor.points = db_victor.points + 1
-    db_loser.points = db_loser.points - 1
-    DB.session.commit()
-    VICTOR = victor_name
-    GAME_OVER = True
-    SOCKET_IO.emit('victory', VICTOR, broadcast=True)
-
 
 @SOCKET_IO.on('updateLeaderboards')
 def update_leaderboards():
@@ -177,16 +143,49 @@ def update_leaderboards():
     This function is called when a victory occurs and sends out the new leaderboard
     to all users.
     """
-    all_players = all_players = models.Player.query.order_by(
-        models.Player.points.desc())
+    top_ten = get_top_players(10)
+    SOCKET_IO.emit('initLeaderboard', top_ten, broadcast=True)
+
+def get_top_players(amount):
+    """
+    Function to get player from database
+    """
+    all_players = models.Player.query.order_by(models.Player.points.desc())
     top_ten = []
-    print(all_players)
-    for player in all_players[:10]:
+    for player in all_players[:amount]:
         new_player = {}
         new_player['username'] = player.username
         new_player['points'] = player.points
         top_ten.append(new_player)
-    SOCKET_IO.emit('initLeaderboard', top_ten, broadcast=True)
+    return top_ten
+
+@SOCKET_IO.on('victory')
+def on_victory(victor_name):
+    """
+    If a victory is obtained on a move, this function is called to update the database
+    and emit the results to all users.
+    """
+    global VICTOR, GAME_OVER
+    if victor_name == PLAYERS[0][0]:
+        update_points(PLAYERS[0][0], PLAYERS[1][0])
+    else:
+        update_points(PLAYERS[1][0], PLAYERS[0][0])
+    VICTOR = victor_name
+    GAME_OVER = True
+    SOCKET_IO.emit('victory', VICTOR, broadcast=True)
+    
+def update_points(victor_name, loser_name):
+    """
+    Updates winner and losers points in the databse
+    """
+    db_victor = DB.session.query(
+        models.Player).filter_by(username=victor_name).first()
+    db_loser = DB.session.query(
+        models.Player).filter_by(username=loser_name).first()
+    print(db_victor)
+    db_victor.points = db_victor.points + 1
+    db_loser.points = db_loser.points - 1
+    DB.session.commit()
 
 
 @SOCKET_IO.on('draw')
