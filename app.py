@@ -52,7 +52,7 @@ def on_disconnect():
 
 
     SOCKET_IO.emit('removePlayer', PLAYERS, broadcast=True)
-    
+
 def remove_player(players, sid):
     """
     this function finds the player assocatied with
@@ -93,19 +93,18 @@ def on_move(data):
     global BOARD, MOVES
     MOVES = MOVES + 1
     BOARD = update_board(BOARD, data['move']['index'], data['move']['symbol'])
-    
     SOCKET_IO.emit('move', data, broadcast=True, include_self=False)
 
-def update_board(board, index, symbol):
+def update_board(board, move_index, symbol):
     """
     The side to the right of the new move is
     spliced off the BOARD array with the new move placed at the end. Then the right side is appended
     again using the copied temp array. This new BOARD is emitted to all other sockets to create
     a new Board component.
     """
-    new_board = board[0:index]
+    new_board = board[0:move_index]
     new_board.append(symbol)
-    new_board.extend(board[index + 1:])
+    new_board.extend(board[move_index + 1:])
     return new_board
 
 @SOCKET_IO.on('initBoard')
@@ -216,7 +215,7 @@ def on_play_again(user_type):
 
 def check_whos_ready(play_again_check, user_type):
     """
-    This function checks to see what player type is ready'ing 
+    This function checks to see what player type is ready'ing
     up and updating the play_again_check array
     """
     prev = play_again_check

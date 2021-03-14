@@ -59,7 +59,7 @@ class RemovePlayerTestCase(unittest.TestCase):
             
 
 BOARD_INPUT = "board"
-INDEX_INPUT = "index"
+MOVE_INDEX_INPUT = "index"
 SYMBOL_INPUT = "symbol"
 EXPECTED_OUTPUT = "board"
 
@@ -69,19 +69,19 @@ class UpdateBoardTestCase(unittest.TestCase):
         self.success_test_params = [
             {
                 BOARD_INPUT: ['','','','','','','','',''],
-                INDEX_INPUT: 8,
+                MOVE_INDEX_INPUT: 8,
                 SYMBOL_INPUT: 'X',
                 EXPECTED_OUTPUT: ['','','','','','','','','X']
             },
             {
                 BOARD_INPUT: ['X','','O','','O','','','X','X'],
-                INDEX_INPUT: 5,
+                MOVE_INDEX_INPUT: 5,
                 SYMBOL_INPUT:'O',
                 EXPECTED_OUTPUT: ['X','','O','','O','O','','X','X']
             },
             {
                 BOARD_INPUT: ['','','X','','','O','','','X'],
-                INDEX_INPUT: 0,
+                MOVE_INDEX_INPUT: 0,
                 SYMBOL_INPUT: 'O',
                 EXPECTED_OUTPUT: ['O','','X','','','O','','','X']
             },
@@ -90,7 +90,7 @@ class UpdateBoardTestCase(unittest.TestCase):
 
     def test_update_board_success(self):
         for test in self.success_test_params:
-            actual_result = update_board(test[BOARD_INPUT], test[INDEX_INPUT], test[SYMBOL_INPUT])
+            actual_result = update_board(test[BOARD_INPUT], test[MOVE_INDEX_INPUT], test[SYMBOL_INPUT])
             expected_result = test[EXPECTED_OUTPUT]
             
             self.assertEqual(len(actual_result), len(expected_result))
@@ -122,7 +122,7 @@ class CheckWhosReadyTestCase(unittest.TestCase):
         ]
 
 
-    def test_update_board_success(self):
+    def test_check_whos_ready_success(self):
         for test in self.success_test_params:
             actual_result = check_whos_ready(test[PLAY_AGAIN_CHECK_INPUT], test[USER_TYPE_INPUT])
             expected_result = test[EXPECTED_OUTPUT]
