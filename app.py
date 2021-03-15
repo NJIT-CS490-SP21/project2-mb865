@@ -173,7 +173,7 @@ def on_victory(victor_name):
     VICTOR = victor_name
     GAME_OVER = True
     SOCKET_IO.emit('victory', VICTOR, broadcast=True)
-    
+
 def update_points(victor_name, loser_name):
     """
     Updates winner and losers points in the databse

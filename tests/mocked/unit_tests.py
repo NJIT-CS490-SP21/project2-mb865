@@ -4,16 +4,15 @@
 """
 
 import unittest
-import unittest.mock as mock
-from models import Player
 from unittest.mock import patch
-from app import add_player, get_top_players, update_points, DB
+from models import Player
+from app import add_player, get_top_players, update_points
 
 USERNAME_INPUT = "username"
 EXPECTED_OUTPUT = "expected"
 
 INITIAL_USERNAME = 'Mike'
-initial_player = Player(username=INITIAL_USERNAME)
+INITIAL_PLAYER = Player(username=INITIAL_USERNAME)
 
 
 
@@ -25,41 +24,46 @@ class AddPlayerTestCase(unittest.TestCase):
         self.success_test_params = [
             {
                 USERNAME_INPUT: 'Joe',
-                EXPECTED_OUTPUT: [initial_player.username,'Joe']
+                EXPECTED_OUTPUT: [INITIAL_PLAYER.username, 'Joe']
             },
             {
                 USERNAME_INPUT: 'Dan',
-                EXPECTED_OUTPUT: [initial_player.username,'Joe', 'Dan']
+                EXPECTED_OUTPUT: [INITIAL_PLAYER.username, 'Joe', 'Dan']
             },
             {
                 USERNAME_INPUT: 'Alex',
-                EXPECTED_OUTPUT: [initial_player.username,'Joe', 'Dan', 'Alex']
+                EXPECTED_OUTPUT: [INITIAL_PLAYER.username, 'Joe', 'Dan', 'Alex']
             },
         ]
-        
 
-        self.initial_db_mock = [initial_player]
-            
+        self.initial_db_mock = [INITIAL_PLAYER]
+
     def mocked_db_session_add(self, username):
+        """
+        mock function for db.session.add
+        """
         self.initial_db_mock.append(username)
 
     def mocked_db_session_commit(self):
-        pass
-        
+        """
+        mock function for db.session.commit
+        """
+
     def test_add_player_success(self):
         """
         function looping through test cases
         """
-        testIndex = 1
+        test_index = 1
         for test in self.success_test_params:
             with patch('app.DB.session.add', self.mocked_db_session_add):
-                    with patch('app.DB.session.commit', self.mocked_db_session_commit):
-                        add_player(test[USERNAME_INPUT])
-                        expected_result = test[EXPECTED_OUTPUT]
-                        self.assertEqual(len(self.initial_db_mock), len(expected_result))
-                        self.assertEqual(self.initial_db_mock[testIndex].username, expected_result[testIndex])
-                        testIndex += 1
-   
+                with patch('app.DB.session.commit', self.mocked_db_session_commit):
+                    add_player(test[USERNAME_INPUT])
+                    expected_result = test[EXPECTED_OUTPUT]
+                    self.assertEqual(len(self.initial_db_mock), len(expected_result))
+                    self.assertEqual(
+                        self.initial_db_mock[test_index].username, expected_result[test_index])
+                    test_index += 1
+
 AMOUNT_INPUT = "amount"
 INITIAL_PLAYERS = [
     Player(username="Mike", points=103),#0
@@ -152,11 +156,14 @@ class GetTopPlayersTestCase(unittest.TestCase):
             },
         ]
         self.initial_db_mock = INITIAL_PLAYERS
-        
+
     def mocked_person_query_all_desc(self, orderby):
+        """
+        mock function to get ordered leaderboard
+        """
         newlist = sorted(self.initial_db_mock, key=lambda x: x.points, reverse=True)
         return newlist
-        
+
     def test_get_top_players_success(self):
         """
         function looping through test cases
@@ -168,12 +175,12 @@ class GetTopPlayersTestCase(unittest.TestCase):
                 expected_result = test[EXPECTED_OUTPUT]
                 self.assertEqual(len(actual_result), len(expected_result))
                 self.assertEqual(actual_result, expected_result)
-    
+
 VICTOR_INPUT = "victor_name"
 LOSER_INPUT = "loser_name"
 EXPECTED_OUTPUT = "expected"
 
-                
+
 class UpdatePointsTestCase(unittest.TestCase):
     """
     Class for testing update_points in app.py
@@ -260,10 +267,13 @@ class UpdatePointsTestCase(unittest.TestCase):
             },
         ]
         self.initial_db_mock = INITIAL_PLAYERS
-    
+
     def mocked_db_query_filter_first(self):
+        """
+        mock function for query
+        """
         return self.initial_db_mock
-        
+
     def test_update_points_success(self):
         """
         function looping through test cases
@@ -273,9 +283,7 @@ class UpdatePointsTestCase(unittest.TestCase):
                 actual_result = update_points(test[VICTOR_INPUT], test[LOSER_INPUT])
                 print(actual_result)
                 expected_result = test[EXPECTED_OUTPUT]
-                # print(actual_result)
-                # print(expected_result)
-                
+                print(expected_result)
 
 if __name__ == '__main__':
     unittest.main()
